@@ -118,13 +118,13 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 25),
               
-              // TELEPLAY BANNER
+              // TELEPLAY BANNER (Using banner-2.jpg)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
-                    'images/teleplay.png',
+                    'images/banner-2.jpg', // <--- CHANGED THIS
                     height: 130,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -133,7 +133,7 @@ class ReceiptScreen extends StatelessWidget {
                         height: 130,
                         color: const Color(0xFF7CB342),
                         child: const Center(
-                          child: Text('Missing teleplay.png', style: TextStyle(color: Colors.white)),
+                          child: Text('Missing banner-2.jpg', style: TextStyle(color: Colors.white)),
                         ),
                       );
                     },
