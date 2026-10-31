@@ -3,16 +3,19 @@ import 'package:flutter/material.dart';
 class ReceiptScreen extends StatelessWidget {
   final String recipientName;
   final String amount;
+  final String transactionType; // This fixes the error!
 
-  const ReceiptScreen({super.key, required this.recipientName, required this.amount});
+  const ReceiptScreen({
+    super.key, 
+    required this.recipientName, 
+    required this.amount, 
+    required this.transactionType, // This fixes the error!
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Generate current time
     final now = DateTime.now();
     final timeString = "${now.year}/${now.month.toString().padLeft(2, '0')}/${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
-    
-    // Generate a random Transaction Number
     final txnNumber = "DHP${DateTime.now().millisecondsSinceEpoch.toString().substring(5)}";
 
     return Scaffold(
@@ -20,7 +23,7 @@ class ReceiptScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        automaticallyImplyLeading: false, // Hides the back button so they can't escape easily lol
+        automaticallyImplyLeading: false,
         actions: [
           TextButton.icon(
             onPressed: () {},
@@ -40,10 +43,11 @@ class ReceiptScreen extends StatelessWidget {
             const SizedBox(height: 20),
             const Icon(Icons.check_circle, color: Colors.green, size: 80),
             const SizedBox(height: 10),
-            const Text('Successful', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text(
+              'Successful',
+              style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 30),
-            
-            // AMOUNT
             Text(
               '$amount (ETB)',
               style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.black87),
@@ -51,13 +55,10 @@ class ReceiptScreen extends StatelessWidget {
             const SizedBox(height: 20),
             const Divider(thickness: 1, color: Colors.grey),
             const SizedBox(height: 20),
-
-            // DETAILS
             _buildDetailRow('Transaction Time:', timeString),
-            _buildDetailRow('Transaction Type:', 'Transfer Money'),
+            _buildDetailRow('Transaction Type:', transactionType),
             _buildDetailRow('Transaction To:', recipientName),
             _buildDetailRow('Transaction Number:', txnNumber),
-            
             const SizedBox(height: 20),
             const Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -68,27 +69,7 @@ class ReceiptScreen extends StatelessWidget {
                 SizedBox(width: 20),
               ],
             ),
-            
-            const SizedBox(height: 30),
-            // Fake Ad Banner
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                height: 100,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.green[100],
-                  borderRadius: BorderRadius.circular(10),
-                  image: const DecorationImage(
-                    image: NetworkImage('https://github.com/birukbr7/Telebirr-clone-by-biruk/blob/main/images/teleplay.png?raw=true'), // Using the image from the repo if it exists
-                    fit: BoxFit.cover,
-                  )
-                ),
-              ),
-            ),
-            
             const SizedBox(height: 40),
-            // FINISHED BUTTON
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SizedBox(
@@ -100,7 +81,6 @@ class ReceiptScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                   onPressed: () {
-                    // This sends them back to the home screen
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                   child: const Text('Finished', style: TextStyle(fontSize: 18, color: Colors.white)),
