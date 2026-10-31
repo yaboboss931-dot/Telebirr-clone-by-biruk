@@ -13,10 +13,10 @@ class TransferInputScreen extends StatefulWidget {
 class _TransferInputScreenState extends State<TransferInputScreen> {
   final TextEditingController phoneController = TextEditingController();
 
+  // This is the secret popup for your prank!
   void showAmountDialog() {
     final TextEditingController amountController = TextEditingController();
     
-    // Check if they typed a name or number
     String nameOrNumber = phoneController.text.trim();
     if (nameOrNumber.isEmpty || nameOrNumber == '+251') {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -44,7 +44,7 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               onPressed: () {
                 if (amountController.text.isNotEmpty) {
-                  Navigator.pop(context); // Close dialog
+                  Navigator.pop(context); // Close popup
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -78,51 +78,39 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
         ),
         title: const Text(
           'Send Money to Individual',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 1. The Banner Image
+            // 1. YOUR BANNER IMAGE
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Container(
-                height: 120,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.blue[900], // Fallback color
-                  image: const DecorationImage(
-                    // Using a generic online image that looks like a banner
-                    image: NetworkImage('https://raw.githubusercontent.com/birukbr7/Telebirr-clone-by-biruk/main/images/banner.jpg'), 
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                // If the image fails to load, it will show this text
-                child: const Center(
-                  child: Text(
-                    'Link your telebirr\nwith FAYDA',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.asset(
+                  'images/banner.jpg', // Make sure this file is uploaded to your images folder!
+                  height: 120,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  // If the image fails to load, it shows a grey box instead of crashing
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    height: 120,
+                    color: Colors.grey[300],
+                    child: const Center(child: Text('Banner Image Not Found')),
                   ),
                 ),
               ),
             ),
 
-            // 2. Dots Indicator
+            // 2. Dots Indicator below banner
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: 8, height: 8,
-                  decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
-                ),
+                Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle)),
                 const SizedBox(width: 5),
-                Container(
-                  width: 8, height: 8,
-                  decoration: BoxDecoration(color: Colors.grey[400], shape: BoxShape.circle),
-                ),
+                Container(width: 8, height: 8, decoration: BoxDecoration(color: Colors.grey[300], shape: BoxShape.circle)),
               ],
             ),
             
@@ -136,14 +124,13 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
-                  boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'Please Enter Mobile Number',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.black87),
                     ),
                     const SizedBox(height: 15),
                     
@@ -151,26 +138,29 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                     TextField(
                       controller: phoneController,
                       keyboardType: TextInputType.phone,
+                      style: const TextStyle(fontSize: 18),
                       decoration: InputDecoration(
                         hintText: '+251',
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Colors.green, width: 2),
+                          borderSide: const BorderSide(color: Colors.green, width: 1.5),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Colors.green, width: 2),
+                          borderSide: const BorderSide(color: Colors.green, width: 1.5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Colors.green, width: 2),
+                          borderSide: const BorderSide(color: Colors.green, width: 1.5),
                         ),
+                        // Exact icons from the picture
                         suffixIcon: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.qr_code_scanner, color: Colors.green),
-                            SizedBox(width: 10),
-                            Icon(Icons.contact_page, color: Colors.green),
+                            Icon(Icons.qr_code_scanner, color: Colors.green, size: 28),
+                            SizedBox(width: 15),
+                            Icon(Icons.contact_page, color: Colors.green, size: 28),
                             SizedBox(width: 10),
                           ],
                         ),
@@ -181,15 +171,15 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                     // Next Button
                     SizedBox(
                       width: double.infinity,
-                      height: 50,
+                      height: 55,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.lightBlue[100], // Identical to screenshot
+                          backgroundColor: const Color(0xFFB3E5FC), // Exact light blue from picture
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           elevation: 0,
                         ),
-                        onPressed: showAmountDialog, // Opens our secret amount popup
-                        child: const Text('Next', style: TextStyle(fontSize: 18, color: Colors.white)),
+                        onPressed: showAmountDialog, // Opens the secret amount popup
+                        child: const Text('Next', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500)),
                       ),
                     ),
                   ],
@@ -197,7 +187,7 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 40),
 
             // 4. Recent Section
             Padding(
@@ -207,32 +197,51 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Recent', style: TextStyle(fontSize: 16, color: Colors.black87)),
-                    const SizedBox(height: 50),
+                    const Text('Recent', style: TextStyle(fontSize: 18, color: Colors.black87)),
+                    const SizedBox(height: 60),
                     Center(
                       child: Column(
                         children: [
-                          // Fake Icon for "No recent receiver"
+                          // Recreating the exact graphic from the picture
                           Stack(
                             alignment: Alignment.bottomRight,
                             children: [
+                              // The 3D green box effect
                               Container(
-                                width: 80, height: 80,
+                                margin: const EdgeInsets.only(right: 6, bottom: 6),
+                                width: 80,
+                                height: 80,
                                 decoration: BoxDecoration(
-                                  color: Colors.green[400],
-                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xFF7CB342), // Darker green for shadow
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: const Icon(Icons.check, size: 50, color: Colors.white),
                               ),
                               Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: const BoxDecoration(color: Colors.yellow, shape: BoxShape.circle),
-                                child: const Icon(Icons.priority_high, size: 20, color: Colors.white),
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF8BC34A), // Light green for front
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Icon(Icons.check, size: 45, color: Colors.white),
+                              ),
+                              // The Yellow Circle with > <
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.amber,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.white, width: 2),
+                                ),
+                                child: const Text(
+                                  '> <',
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: -2),
+                                ),
                               )
                             ],
                           ),
-                          const SizedBox(height: 10),
-                          const Text('No recent receiver', style: TextStyle(color: Colors.grey, fontSize: 14)),
+                          const SizedBox(height: 15),
+                          Text('No recent receiver', style: TextStyle(color: Colors.grey[600], fontSize: 16)),
                         ],
                       ),
                     )
