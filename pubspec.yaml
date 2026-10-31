@@ -1,4 +1,4 @@
-name: telebirrbybr7
+name: telebirr
 description: A new Flutter project.
 publish_to: "none"
 
@@ -35,18 +35,5 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
-
-  # WE ADDED YOUR TWO IMAGES HERE!
   assets:
-    - images/ethio.png
-    - images/telebirr.png
-    - images/cbe.png
-    - images/dashen.png
-    - images/banner-1.jpg
-    - images/banner-2.jpg
-    - images/banner-3.jpg
-    - images/ethio-logo.png
-    - images/christmas.png
-    - images/br7logo.png
-    - images/banner.jpg        # <--- ADDED THIS
-    - images/teleplay.png      # <--- ADDED THIS
+    - images/
