@@ -49,66 +49,66 @@ class ReceiptScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: const [
-                        Icon(Icons.download, color: Color(0xFF7CB342), size: 24),
-                        SizedBox(width: 8),
-                        Text('Download', style: TextStyle(color: Color(0xFF7CB342), fontSize: 16)),
+                        Icon(Icons.download, color: Color(0xFF7CB342), size: 22),
+                        SizedBox(width: 6),
+                        Text('Download', style: TextStyle(color: Color(0xFF7CB342), fontSize: 15)),
                       ],
                     ),
                     Row(
                       children: const [
-                        Icon(Icons.share, color: Color(0xFF7CB342), size: 24),
-                        SizedBox(width: 8),
-                        Text('Share', style: TextStyle(color: Color(0xFF7CB342), fontSize: 16)),
+                        Icon(Icons.share, color: Color(0xFF7CB342), size: 22),
+                        SizedBox(width: 6),
+                        Text('Share', style: TextStyle(color: Color(0xFF7CB342), fontSize: 15)),
                       ],
                     ),
                   ],
                 ),
               ),
               
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               
               // 2. SUCCESS ICON
-              const Icon(Icons.check_circle, color: Color(0xFF7CB342), size: 80),
-              const SizedBox(height: 10),
+              const Icon(Icons.check_circle, color: Color(0xFF7CB342), size: 70),
+              const SizedBox(height: 8),
               const Text(
                 'Successful',
-                style: TextStyle(color: Color(0xFF7CB342), fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Color(0xFF7CB342), fontSize: 18, fontWeight: FontWeight.bold),
               ),
               
-              const SizedBox(height: 60), // Large gap like the picture
+              const SizedBox(height: 45), 
               
-              // 3. AMOUNT (WITH MINUS SIGN)
+              // 3. AMOUNT (WITH MINUS SIGN) - FONT REDUCED
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   const Text(
-                    '-', // The minus sign!
-                    style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold, color: Colors.black87, height: 0.9),
+                    '-', 
+                    style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold, color: Colors.black87, height: 0.9),
                   ),
                   Text(
                     displayAmount,
-                    style: const TextStyle(fontSize: 45, fontWeight: FontWeight.bold, color: Colors.black87, height: 0.9),
+                    style: const TextStyle(fontSize: 38, fontWeight: FontWeight.bold, color: Colors.black87, height: 0.9),
                   ),
                   const SizedBox(width: 5),
                   const Text(
                     '(ETB)',
-                    style: TextStyle(fontSize: 20, color: Colors.black87, fontWeight: FontWeight.w400),
+                    style: TextStyle(fontSize: 18, color: Colors.black87, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
               
-              const SizedBox(height: 40),
-              const Divider(thickness: 1, color: Color(0xFFEEEEEE), indent: 20, endIndent: 20),
               const SizedBox(height: 30),
+              const Divider(thickness: 1, color: Color(0xFFEEEEEE), indent: 20, endIndent: 20),
+              const SizedBox(height: 20),
 
-              // 4. DETAILS
+              // 4. DETAILS - FONT SIZE REDUCED
               _buildDetailRow('Transaction Time:', timeString),
               _buildDetailRow('Transaction Type:', 'Transfer Money'),
               _buildDetailRow('Transaction To:', recipientName), 
               _buildDetailRow('Transaction Number:', txnNumber),
               
-              const SizedBox(height: 15),
+              const SizedBox(height: 10),
               
               // 5. QR CODE
               const Padding(
@@ -116,22 +116,22 @@ class ReceiptScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Icon(Icons.qr_code, color: Color(0xFF7CB342), size: 28),
-                    SizedBox(width: 8),
-                    Text('QR Code', style: TextStyle(color: Color(0xFF7CB342), fontSize: 18, fontWeight: FontWeight.w500)),
+                    Icon(Icons.qr_code, color: Color(0xFF7CB342), size: 26),
+                    SizedBox(width: 6),
+                    Text('QR Code', style: TextStyle(color: Color(0xFF7CB342), fontSize: 16, fontWeight: FontWeight.w500)),
                   ],
                 ),
               ),
               
-              const SizedBox(height: 30),
+              const SizedBox(height: 25),
               
-              // 6. TELEPLAY BANNER (Uses your uploaded image)
+              // 6. TELEPLAY BANNER
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
-                    'images/teleplay.png', // Make sure you uploaded this!
+                    'images/teleplay.png',
                     height: 130,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -164,14 +164,14 @@ class ReceiptScreen extends StatelessWidget {
                 ],
               ),
               
-              const SizedBox(height: 50),
+              const SizedBox(height: 40),
               
               // 8. FINISHED BUTTON
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 60), // Narrower button
+                padding: const EdgeInsets.symmetric(horizontal: 50), 
                 child: SizedBox(
                   width: double.infinity,
-                  height: 55,
+                  height: 50, // Slightly smaller height
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF7CB342),
@@ -181,7 +181,7 @@ class ReceiptScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     },
-                    child: const Text('Finished', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500)),
+                    child: const Text('Finished', style: TextStyle(fontSize: 17, color: Colors.white, fontWeight: FontWeight.w500)),
                   ),
                 ),
               ),
@@ -193,19 +193,19 @@ class ReceiptScreen extends StatelessWidget {
     );
   }
 
-  // Helper function for the rows (Fixes the spacing and text sizes)
+  // Helper function for the rows
   Widget _buildDetailRow(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Increased spacing
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12), // Tighter spacing
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: TextStyle(fontSize: 16, color: Colors.grey[600])),
+          Text(title, style: TextStyle(fontSize: 15, color: Colors.grey[600])), // Reduced from 16
           Expanded(
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: const TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 15, color: Colors.black87, fontWeight: FontWeight.w500), // Reduced from 16
             ),
           ),
         ],
