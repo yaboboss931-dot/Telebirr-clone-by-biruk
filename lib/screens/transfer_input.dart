@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'enter_amount_screen.dart'; // Imports the new screen
+import 'enter_amount_screen.dart'; 
 
 class TransferInputScreen extends StatefulWidget {
   final String transferType;
@@ -11,28 +11,23 @@ class TransferInputScreen extends StatefulWidget {
 }
 
 class _TransferInputScreenState extends State<TransferInputScreen> {
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
   void goToAmountScreen() {
-    String number = phoneController.text.trim();
-    if (number.isEmpty || number == '+251') {
+    String input = nameController.text.trim();
+    if (input.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a mobile number')),
+        const SnackBar(content: Text('Please enter a name or number')),
       );
       return;
-    }
-
-    // If they typed 0911..., remove the leading 0 for realism
-    if (number.startsWith('0')) {
-      number = number.substring(1);
     }
 
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EnterAmountScreen(
-          recipientName: 'Selamawit', // Hardcoded to match your screenshot
-          phoneNumber: number,
+          recipientName: input, // Sends your custom name!
+          phoneNumber: input, 
           transferType: widget.transferType,
         ),
       ),
@@ -102,19 +97,19 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Please Enter Mobile Number',
+                      'Please Enter Name or Number',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.black87),
                     ),
                     const SizedBox(height: 15),
                     
                     // TEXT FIELD
                     TextField(
-                      controller: phoneController,
-                      keyboardType: TextInputType.phone,
+                      controller: nameController,
+                      keyboardType: TextInputType.text, // Allows typing names
                       style: const TextStyle(fontSize: 18, color: Colors.black), 
                       decoration: InputDecoration(
-                        hintText: '+251',
-                        hintStyle: const TextStyle(color: Colors.black87, fontWeight: FontWeight.w400),
+                        hintText: 'e.g. Neja Kamil Nura',
+                        hintStyle: const TextStyle(color: Colors.black38, fontWeight: FontWeight.w400),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -153,7 +148,7 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           elevation: 0,
                         ),
-                        onPressed: goToAmountScreen, // Connects to the new screen
+                        onPressed: goToAmountScreen, 
                         child: const Text('Next', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w400)),
                       ),
                     ),
