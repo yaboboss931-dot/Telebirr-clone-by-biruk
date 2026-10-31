@@ -23,10 +23,12 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
 
   void proceedToLoading() {
     if (amountController.text.isNotEmpty) {
+      // MAGIC: We use PageRouteBuilder with opaque: false to make it transparent
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => LoadingScreen(
+        PageRouteBuilder(
+          opaque: false, 
+          pageBuilder: (context, _, __) => LoadingScreen(
             recipientName: widget.recipientName,
             amount: amountController.text,
             transactionType: widget.transferType,
@@ -78,14 +80,14 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.recipientName, // Shows your custom name!
+                        widget.recipientName, 
                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black87),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        widget.phoneNumber, // Shows the number or name again
+                        widget.phoneNumber, 
                         style: const TextStyle(fontSize: 15, color: Colors.grey),
                       ),
                     ],
@@ -124,7 +126,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                             border: InputBorder.none,
                             isDense: true,
                             contentPadding: EdgeInsets.zero,
-                            hintText: '', // REMOVED 0.00
+                            hintText: '', 
                           ),
                         ),
                       ),
