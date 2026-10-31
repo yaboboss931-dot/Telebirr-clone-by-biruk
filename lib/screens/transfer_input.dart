@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'receipt_screen.dart';
+import 'loading_screen.dart'; // <--- THIS IS NEW!
 
 class TransferInputScreen extends StatefulWidget {
   final String transferType;
@@ -45,16 +45,19 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
               onPressed: () {
                 if (amountController.text.isNotEmpty) {
                   Navigator.pop(context); // Close popup
+                  
+                  // GO TO THE LOADING SCREEN INSTEAD OF RECEIPT
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ReceiptScreen(
+                      builder: (context) => LoadingScreen(
                         recipientName: nameOrNumber,
                         amount: amountController.text,
                         transactionType: widget.transferType,
                       ),
                     ),
                   );
+                  
                 }
               },
               child: const Text('Generate Receipt', style: TextStyle(color: Colors.white)),
@@ -90,11 +93,10 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image.asset(
-                  'images/banner.jpg', // Make sure this file is uploaded to your images folder!
+                  'images/banner.jpg', // Make sure this file is uploaded!
                   height: 120,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  // If the image fails to load, it shows a grey box instead of crashing
                   errorBuilder: (context, error, stackTrace) => Container(
                     height: 120,
                     color: Colors.grey[300],
