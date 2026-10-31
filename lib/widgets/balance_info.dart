@@ -32,7 +32,7 @@ class _BalanceInfoState extends State<BalanceInfo> {
   Widget build(BuildContext context) {
     // THE MAGIC IS HERE: Showing 189,578 when the eye icon is tapped!
     final String balance =
-        showBalance ? '189,578' : '******';
+        showBalance ? '236,752.38' : '******';
         
     return Column(
       crossAxisAlignment: widget.crossAxisAlignment,
