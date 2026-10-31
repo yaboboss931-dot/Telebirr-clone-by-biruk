@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'receipt_screen.dart';
 
 class TransferInputScreen extends StatefulWidget {
-  const TransferInputScreen({super.key});
+  final String transferType; // <--- THIS FIXES THE ERROR
+
+  const TransferInputScreen({super.key, required this.transferType}); // <--- AND THIS
 
   @override
   State<TransferInputScreen> createState() => _TransferInputScreenState();
@@ -16,8 +18,8 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Money Transfer'),
-        backgroundColor: const Color.fromRGBO(140, 199, 63, 1), // Telebirr Green
+        title: Text(widget.transferType),
+        backgroundColor: const Color.fromRGBO(140, 199, 63, 1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -53,13 +55,13 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                 ),
                 onPressed: () {
                   if (nameController.text.isNotEmpty && amountController.text.isNotEmpty) {
-                    // Navigate to Receipt Screen with the data!
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => ReceiptScreen(
                           recipientName: nameController.text,
                           amount: amountController.text,
+                          transactionType: widget.transferType,
                         ),
                       ),
                     );
@@ -69,10 +71,7 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                     );
                   }
                 },
-                child: const Text(
-                  'Send',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
+                child: const Text('Send', style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
             ),
           ],
