@@ -9,7 +9,6 @@ import 'package:telebirrbybr7/widgets/grid_content.dart';
 import 'package:telebirrbybr7/widgets/notification_area.dart';
 import 'package:telebirrbybr7/widgets/transaction%20detail.dart';
 import 'package:telebirrbybr7/widgets/user_introduction.dart';
-import 'transfer_input.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -181,7 +180,9 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      
+    );
+  }
+}
 
 class ImageSliderIndicator extends StatelessWidget {
   const ImageSliderIndicator({
@@ -214,6 +215,7 @@ class ImageSliderIndicator extends StatelessWidget {
     );
   }
 }
+
 class DropDownLang extends StatelessWidget {
   const DropDownLang({
     super.key,
