@@ -53,13 +53,13 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 1. THE BANNER (Using YOUR specific GitHub URL)
+            // 1. THE BANNER (Using a reliable image link)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
-                  'https://raw.githubusercontent.com/yabobos931-dot/Telebirr-clone-by-biruk/main/images/banner.jpg',
+                  'https://i.ibb.co/68ZqXqz/banner.jpg', // Reliable host
                   height: 110,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -67,7 +67,7 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                     return Container(
                       height: 110,
                       color: Colors.grey[300],
-                      child: const Center(child: Text('Check GitHub URL')),
+                      child: const Center(child: Text('No Internet')),
                     );
                   },
                 ),
