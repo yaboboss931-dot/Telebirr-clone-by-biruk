@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -32,8 +30,10 @@ class _BalanceInfoState extends State<BalanceInfo> {
 
   @override
   Widget build(BuildContext context) {
+    // THE MAGIC IS HERE: Showing 189,578 when the eye icon is tapped!
     final String balance =
-        showBalance ? Random().nextInt(1000).toString() : '******';
+        showBalance ? '189,578' : '******';
+        
     return Column(
       crossAxisAlignment: widget.crossAxisAlignment,
       children: [
