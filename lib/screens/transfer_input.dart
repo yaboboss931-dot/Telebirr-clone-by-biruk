@@ -53,23 +53,18 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 1. THE BANNER (Fixes the missing image error)
+            // 1. THE BANNER
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  'images/banner.jpg', 
-                  height: 110,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    height: 110,
-                    width: double.infinity,
-                    color: Colors.grey[300],
-                    child: const Center(
-                      child: Text('Missing banner.jpg in images folder', style: TextStyle(color: Colors.grey)),
-                    ),
+              child: Container(
+                height: 110,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.grey[300], // Fallback color if image is missing
+                  image: const DecorationImage(
+                    image: AssetImage('images/banner.jpg'),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -99,7 +94,6 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Target text is "Mobile Number"
                     const Text(
                       'Please Enter Mobile Number',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.black87),
@@ -109,10 +103,10 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                     // TEXT FIELD
                     TextField(
                       controller: nameController,
-                      keyboardType: TextInputType.text, // Kept as text so you can type names
+                      keyboardType: TextInputType.text, 
                       style: const TextStyle(fontSize: 18, color: Colors.black), 
                       decoration: InputDecoration(
-                        hintText: '+251', // Target hint
+                        hintText: '+251', 
                         hintStyle: const TextStyle(color: Colors.black87, fontWeight: FontWeight.w400, fontSize: 18),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                         border: OutlineInputBorder(
@@ -142,13 +136,13 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                     ),
                     const SizedBox(height: 20),
 
-                    // NEXT BUTTON (Light Blue exactly like target)
+                    // NEXT BUTTON
                     SizedBox(
                       width: double.infinity,
                       height: 55,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFB3E5FC), // Target Light Blue
+                          backgroundColor: const Color(0xFFB3E5FC), 
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           elevation: 0,
                         ),
@@ -163,7 +157,7 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
 
             const SizedBox(height: 30),
 
-            // 4. RECENT SECTION (Exact 3D Icon Match)
+            // 4. RECENT SECTION 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Align(
@@ -179,7 +173,6 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                           Stack(
                             alignment: Alignment.bottomRight,
                             children: [
-                              // The shadow (dark green)
                               Container(
                                 margin: const EdgeInsets.only(right: 6, bottom: 6),
                                 width: 85,
@@ -189,7 +182,6 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              // The front (light green)
                               Container(
                                 width: 85,
                                 height: 85,
@@ -199,7 +191,6 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                                 ),
                                 child: const Icon(Icons.check, size: 50, color: Colors.white),
                               ),
-                              // The Face (yellow circle)
                               Container(
                                 width: 42,
                                 height: 42,
