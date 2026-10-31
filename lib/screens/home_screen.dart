@@ -181,56 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      // THIS IS THE MAGIC BUTTON AT THE BOTTOM
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(
-          bottom: 10.0,
-          right: 30.0,
-        ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.75,
-          child: MaterialButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            onPressed: () {
-              // OPENS THE PRANK SCREEN!
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const TransferInputScreen(
-                    transferType: 'Send Money',
-                  ),
-                ),
-              );
-            },
-            color: const Color.fromRGBO(140, 199, 63, 1), // Changed to Green!
-            textColor: Colors.white,
-            child: const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.send,
-                    size: 24,
-                  ),
-                  Text(
-                    '  PRANK TRANSFER',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+      
 
 class ImageSliderIndicator extends StatelessWidget {
   const ImageSliderIndicator({
@@ -263,7 +214,6 @@ class ImageSliderIndicator extends StatelessWidget {
     );
   }
 }
-
 class DropDownLang extends StatelessWidget {
   const DropDownLang({
     super.key,
