@@ -18,7 +18,6 @@ class ReceiptScreen extends StatelessWidget {
     final now = DateTime.now();
     final timeString = "${now.year}/${now.month.toString().padLeft(2, '0')}/${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
     
-    // Generate random ID
     final random = Random();
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     String txnNumber = 'DHP';
@@ -29,7 +28,6 @@ class ReceiptScreen extends StatelessWidget {
       txnNumber += random.nextInt(10).toString();
     }
 
-    // Format amount to have .00
     String displayAmount = amount;
     if (!displayAmount.contains('.')) {
       displayAmount = '$amount.00';
@@ -41,7 +39,6 @@ class ReceiptScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // 1. TOP BUTTONS (Download & Share)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: Row(
@@ -67,7 +64,6 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 10),
               
-              // 2. SUCCESS ICON
               const Icon(Icons.check_circle, color: Color(0xFF7CB342), size: 70),
               const SizedBox(height: 8),
               const Text(
@@ -77,7 +73,6 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 45), 
               
-              // 3. AMOUNT (WITH MINUS SIGN)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -102,7 +97,6 @@ class ReceiptScreen extends StatelessWidget {
               const Divider(thickness: 1, color: Color(0xFFEEEEEE), indent: 20, endIndent: 20),
               const SizedBox(height: 20),
 
-              // 4. DETAILS
               _buildDetailRow('Transaction Time:', timeString),
               _buildDetailRow('Transaction Type:', 'Transfer Money'),
               _buildDetailRow('Transaction To:', recipientName), 
@@ -110,7 +104,6 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 10),
               
-              // 5. QR CODE
               const Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: Row(
@@ -125,13 +118,13 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 25),
               
-              // 6. TELEPLAY BANNER (Using YOUR specific GitHub URL)
+              // TELEPLAY BANNER (Offline Asset)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    'https://raw.githubusercontent.com/yabobos931-dot/Telebirr-clone-by-biruk/main/images/teleplay.png',
+                  child: Image.asset(
+                    'images/teleplay.png',
                     height: 130,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -140,7 +133,7 @@ class ReceiptScreen extends StatelessWidget {
                         height: 130,
                         color: const Color(0xFF7CB342),
                         child: const Center(
-                          child: Text('Check GitHub URL', style: TextStyle(color: Colors.white)),
+                          child: Text('Image not found in assets', style: TextStyle(color: Colors.white)),
                         ),
                       );
                     },
@@ -150,7 +143,6 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 15),
               
-              // 7. DOTS
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -166,7 +158,6 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 40),
               
-              // 8. FINISHED BUTTON
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50), 
                 child: SizedBox(
