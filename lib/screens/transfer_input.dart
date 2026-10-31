@@ -53,19 +53,23 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 1. THE BANNER
+            // 1. THE BANNER (Now loads from the internet)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Container(
-                height: 110,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey[300], // Fallback color if image is missing
-                  image: const DecorationImage(
-                    image: AssetImage('images/banner.jpg'),
-                    fit: BoxFit.cover,
-                  ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  'https://raw.githubusercontent.com/birukbr7/Telebirr-clone-by-biruk/main/images/banner.jpg',
+                  height: 110,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 110,
+                      color: Colors.grey[300],
+                      child: const Center(child: Text('Network Error')),
+                    );
+                  },
                 ),
               ),
             ),
