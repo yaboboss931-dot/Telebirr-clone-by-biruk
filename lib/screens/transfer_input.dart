@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'loading_screen.dart'; // <--- THIS IS NEW!
+import 'loading_screen.dart'; 
 
 class TransferInputScreen extends StatefulWidget {
   final String transferType;
@@ -13,7 +13,6 @@ class TransferInputScreen extends StatefulWidget {
 class _TransferInputScreenState extends State<TransferInputScreen> {
   final TextEditingController phoneController = TextEditingController();
 
-  // This is the secret popup for your prank!
   void showAmountDialog() {
     final TextEditingController amountController = TextEditingController();
     
@@ -44,9 +43,7 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               onPressed: () {
                 if (amountController.text.isNotEmpty) {
-                  Navigator.pop(context); // Close popup
-                  
-                  // GO TO THE LOADING SCREEN INSTEAD OF RECEIPT
+                  Navigator.pop(context); 
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -57,7 +54,6 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                       ),
                     ),
                   );
-                  
                 }
               },
               child: const Text('Generate Receipt', style: TextStyle(color: Colors.white)),
@@ -71,7 +67,7 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5), // Light grey background
+      backgroundColor: const Color(0xFFF5F5F5), 
       appBar: AppBar(
         backgroundColor: const Color(0xFFF5F5F5),
         elevation: 0,
@@ -87,38 +83,38 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 1. YOUR BANNER IMAGE
+            // 1. THE BANNER
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
-                  'images/banner.jpg', // Make sure this file is uploaded!
-                  height: 120,
+                  'images/banner.jpg', 
+                  height: 110,
                   width: double.infinity,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    height: 120,
+                    height: 110,
                     color: Colors.grey[300],
-                    child: const Center(child: Text('Banner Image Not Found')),
+                    child: const Center(child: Text('Check images folder for banner.jpg')),
                   ),
                 ),
               ),
             ),
 
-            // 2. Dots Indicator below banner
+            // 2. Dots Indicator 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle)),
-                const SizedBox(width: 5),
-                Container(width: 8, height: 8, decoration: BoxDecoration(color: Colors.grey[300], shape: BoxShape.circle)),
+                Container(width: 7, height: 7, decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle)),
+                const SizedBox(width: 6),
+                Container(width: 7, height: 7, decoration: BoxDecoration(color: Colors.grey[300], shape: BoxShape.circle)),
               ],
             ),
             
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
 
-            // 3. The White Card
+            // 3. THE WHITE CARD
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Container(
@@ -136,14 +132,15 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                     ),
                     const SizedBox(height: 15),
                     
-                    // Text Field
+                    // TEXT FIELD
                     TextField(
                       controller: phoneController,
                       keyboardType: TextInputType.phone,
-                      style: const TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18, color: Colors.black), // Solid black text
                       decoration: InputDecoration(
                         hintText: '+251',
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        hintStyle: const TextStyle(color: Colors.black87, fontWeight: FontWeight.w400),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.green, width: 1.5),
@@ -156,32 +153,34 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                           borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.green, width: 1.5),
                         ),
-                        // Exact icons from the picture
-                        suffixIcon: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.qr_code_scanner, color: Colors.green, size: 28),
-                            SizedBox(width: 15),
-                            Icon(Icons.contact_page, color: Colors.green, size: 28),
-                            SizedBox(width: 10),
-                          ],
+                        // Larger, spaced out icons
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.only(right: 15.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(Icons.qr_code_scanner, color: Color(0xFF7CB342), size: 32),
+                              SizedBox(width: 15),
+                              Icon(Icons.contact_page, color: Color(0xFF7CB342), size: 32),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
 
-                    // Next Button
+                    // NEXT BUTTON (Solid Blue like your picture)
                     SizedBox(
                       width: double.infinity,
                       height: 55,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFB3E5FC), // Exact light blue from picture
+                          backgroundColor: const Color(0xFF0088FF), // Bright solid blue
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           elevation: 0,
                         ),
-                        onPressed: showAmountDialog, // Opens the secret amount popup
-                        child: const Text('Next', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500)),
+                        onPressed: showAmountDialog, 
+                        child: const Text('Next', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w400)),
                       ),
                     ),
                   ],
@@ -189,9 +188,9 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
               ),
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
 
-            // 4. Recent Section
+            // 4. RECENT SECTION (The exact icon you want)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Align(
@@ -204,46 +203,62 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                     Center(
                       child: Column(
                         children: [
-                          // Recreating the exact graphic from the picture
+                          // The 3D Green Box with Yellow Face
                           Stack(
                             alignment: Alignment.bottomRight,
                             children: [
-                              // The 3D green box effect
+                              // The shadow
                               Container(
                                 margin: const EdgeInsets.only(right: 6, bottom: 6),
-                                width: 80,
-                                height: 80,
+                                width: 85,
+                                height: 85,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF7CB342), // Darker green for shadow
+                                  color: const Color(0xFF689F38), // Dark green shadow
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
+                              // The main green box
                               Container(
-                                width: 80,
-                                height: 80,
+                                width: 85,
+                                height: 85,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF8BC34A), // Light green for front
+                                  color: const Color(0xFF8BC34A), // Light green
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: const Icon(Icons.check, size: 45, color: Colors.white),
+                                child: const Icon(Icons.check, size: 50, color: Colors.white),
                               ),
-                              // The Yellow Circle with > <
+                              // The Yellow Face Circle
                               Container(
-                                padding: const EdgeInsets.all(6),
+                                width: 42,
+                                height: 42,
                                 decoration: BoxDecoration(
                                   color: Colors.amber,
                                   shape: BoxShape.circle,
                                   border: Border.all(color: Colors.white, width: 2),
                                 ),
-                                child: const Text(
-                                  '> <',
-                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: -2),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(Icons.close, size: 10, color: Colors.black),
+                                        SizedBox(width: 6),
+                                        Icon(Icons.close, size: 10, color: Colors.black),
+                                      ],
+                                    ),
+                                    Container(
+                                      width: 14,
+                                      height: 2,
+                                      color: Colors.black,
+                                    )
+                                  ],
                                 ),
                               )
                             ],
                           ),
                           const SizedBox(height: 15),
-                          Text('No recent receiver', style: TextStyle(color: Colors.grey[600], fontSize: 16)),
+                          Text('No recent receiver', style: TextStyle(color: Colors.grey[600], fontSize: 15)),
                         ],
                       ),
                     )
