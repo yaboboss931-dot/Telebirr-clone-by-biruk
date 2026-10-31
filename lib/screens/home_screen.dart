@@ -9,7 +9,7 @@ import 'package:telebirrbybr7/widgets/grid_content.dart';
 import 'package:telebirrbybr7/widgets/notification_area.dart';
 import 'package:telebirrbybr7/widgets/transaction%20detail.dart';
 import 'package:telebirrbybr7/widgets/user_introduction.dart';
-
+import 'transfer_input.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -23,6 +23,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TransferInputScreen()),
+    );
+  },
+  backgroundColor: const Color.fromRGBO(140, 199, 63, 1),
+  icon: const Icon(Icons.send, color: Colors.white),
+  label: const Text('Prank', style: TextStyle(color: Colors.white)),
+),
       backgroundColor: const Color.fromRGBO(245, 245, 245, 1),
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
