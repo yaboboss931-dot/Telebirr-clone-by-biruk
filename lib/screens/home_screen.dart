@@ -10,6 +10,7 @@ import 'package:telebirrbybr7/widgets/notification_area.dart';
 import 'package:telebirrbybr7/widgets/transaction%20detail.dart';
 import 'package:telebirrbybr7/widgets/user_introduction.dart';
 import 'transfer_input.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -23,17 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const TransferInputScreen()),
-    );
-  },
-  backgroundColor: const Color.fromRGBO(140, 199, 63, 1),
-  icon: const Icon(Icons.send, color: Colors.white),
-  label: const Text('Prank', style: TextStyle(color: Colors.white)),
-),
       backgroundColor: const Color.fromRGBO(245, 245, 245, 1),
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -191,6 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
+      // THIS IS THE MAGIC BUTTON AT THE BOTTOM
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(
           bottom: 10.0,
@@ -202,8 +193,18 @@ class _HomeScreenState extends State<HomeScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            onPressed: () {},
-            color: const Color.fromRGBO(2, 135, 208, 1),
+            onPressed: () {
+              // OPENS THE PRANK SCREEN!
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TransferInputScreen(
+                    transferType: 'Send Money',
+                  ),
+                ),
+              );
+            },
+            color: const Color.fromRGBO(140, 199, 63, 1), // Changed to Green!
             textColor: Colors.white,
             child: const Padding(
               padding: EdgeInsets.all(10.0),
@@ -211,11 +212,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.qr_code_scanner_rounded,
+                    Icons.send,
                     size: 24,
                   ),
                   Text(
-                    '  Scan QR',
+                    '  PRANK TRANSFER',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
