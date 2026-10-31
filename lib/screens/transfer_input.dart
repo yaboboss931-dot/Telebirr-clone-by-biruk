@@ -53,13 +53,13 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 1. THE BANNER
+            // 1. THE BANNER (Using banner-1.jpg which you already have)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
-                  'images/banner.jpg',
+                  'images/banner-1.jpg', // <--- CHANGED THIS
                   height: 110,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -67,7 +67,7 @@ class _TransferInputScreenState extends State<TransferInputScreen> {
                     return Container(
                       height: 110,
                       color: Colors.grey[300],
-                      child: const Center(child: Text('Missing banner.jpg')),
+                      child: const Center(child: Text('Missing banner-1.jpg')),
                     );
                   },
                 ),
