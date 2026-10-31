@@ -125,19 +125,25 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 25),
               
-              // 6. TELEPLAY BANNER
+              // 6. TELEPLAY BANNER (Now loads from the internet)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Container(
-                  height: 130,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xFF7CB342), // Green fallback if missing
-                    image: const DecorationImage(
-                      image: AssetImage('images/teleplay.png'),
-                      fit: BoxFit.cover,
-                    ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    'https://raw.githubusercontent.com/birukbr7/Telebirr-clone-by-biruk/main/images/teleplay.png',
+                    height: 130,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 130,
+                        color: const Color(0xFF7CB342),
+                        child: const Center(
+                          child: Text('Network Error', style: TextStyle(color: Colors.white)),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
