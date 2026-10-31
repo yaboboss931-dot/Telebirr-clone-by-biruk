@@ -125,13 +125,13 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 25),
               
-              // 6. TELEPLAY BANNER (Now loads from the internet)
+              // 6. TELEPLAY BANNER (Using YOUR specific GitHub URL)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
-                    'https://raw.githubusercontent.com/birukbr7/Telebirr-clone-by-biruk/main/images/teleplay.png',
+                    'https://raw.githubusercontent.com/yabobos931-dot/Telebirr-clone-by-biruk/main/images/teleplay.png',
                     height: 130,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -140,7 +140,7 @@ class ReceiptScreen extends StatelessWidget {
                         height: 130,
                         color: const Color(0xFF7CB342),
                         child: const Center(
-                          child: Text('Network Error', style: TextStyle(color: Colors.white)),
+                          child: Text('Check GitHub URL', style: TextStyle(color: Colors.white)),
                         ),
                       );
                     },
