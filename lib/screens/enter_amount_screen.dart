@@ -43,9 +43,9 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF5F5F5),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -60,105 +60,124 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
         children: [
           // 1. Recipient Info
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             child: Row(
               children: [
                 Container(
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: Colors.amber, // Yellow background
+                    color: Colors.amber, 
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(Icons.person, color: Colors.white, size: 40),
                 ),
                 const SizedBox(width: 15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Selamawit', // Matches your screenshot
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black87),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      '251${widget.phoneNumber}', // Uses the number typed in the first screen
-                      style: const TextStyle(fontSize: 15, color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          
-          const Divider(thickness: 1, color: Color(0xFFEEEEEE)),
-          
-          // 2. Amount Section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  'Amount',
-                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                ),
-                const SizedBox(width: 20),
                 Expanded(
-                  child: TextField(
-                    controller: amountController,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    autofocus: true, // Opens keyboard immediately
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.black),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '0.00',
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
-                    onSubmitted: (value) => proceedToLoading(), // Hitting 'OK' on keyboard sends
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.recipientName, // Shows your custom name!
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black87),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        widget.phoneNumber, // Shows the number or name again
+                        style: const TextStyle(fontSize: 15, color: Colors.grey),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 10),
-                const Text(
-                  '(ETB)',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
               ],
             ),
           ),
           
-          const Divider(thickness: 1, color: Color(0xFFEEEEEE)),
-          
-          // 3. Notes Section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            child: TextField(
-              controller: notesController,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Add notes(optional)',
-                hintStyle: TextStyle(color: Colors.blueGrey, fontSize: 15),
-              ),
+          // 2. White Container for Amount and Notes
+          Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                // Amount Row
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Amount',
+                        style: TextStyle(fontSize: 16, color: Colors.black87),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: TextField(
+                          controller: amountController,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          autofocus: true, 
+                          textAlign: TextAlign.right,
+                          textInputAction: TextInputAction.done, 
+                          onSubmitted: (value) => proceedToLoading(),
+                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500, color: Colors.black),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                            hintText: '', // REMOVED 0.00
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      
+                      // The Vertical Line + (ETB)
+                      Row(
+                        children: [
+                          Container(
+                            height: 20,
+                            width: 1,
+                            color: Colors.grey[300],
+                          ),
+                          const SizedBox(width: 10),
+                          const Text(
+                            '(ETB)',
+                            style: TextStyle(fontSize: 16, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                
+                Divider(height: 1, thickness: 1, color: Colors.grey[200]),
+                
+                // Notes Section
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: TextField(
+                    controller: notesController,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                      hintText: 'Add notes(optional)',
+                      hintStyle: TextStyle(color: Color(0xFF78909C), fontSize: 15), 
+                    ),
+                  ),
+                ),
+                
+                Divider(height: 1, thickness: 1, color: Colors.grey[200]),
+              ],
             ),
           ),
-
-          const Spacer(), // Pushes the button to the bottom
           
-          // 4. Submit Button (In case they close the keyboard)
+          const Spacer(),
           Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF0088FF), // Solid blue
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                onPressed: proceedToLoading,
-                child: const Text('Send', style: TextStyle(fontSize: 18, color: Colors.white)),
-              ),
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: Icon(
+              Icons.keyboard_arrow_down, 
+              color: Colors.grey[400],
+              size: 30,
             ),
           ),
         ],
