@@ -118,13 +118,13 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 25),
               
-              // TELEPLAY BANNER (Using a reliable image link)
+              // TELEPLAY BANNER
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    'https://i.ibb.co/3s6Gv0B/teleplay.png', // Reliable host
+                  child: Image.asset(
+                    'images/teleplay.png',
                     height: 130,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -133,7 +133,7 @@ class ReceiptScreen extends StatelessWidget {
                         height: 130,
                         color: const Color(0xFF7CB342),
                         child: const Center(
-                          child: Text('No Internet', style: TextStyle(color: Colors.white)),
+                          child: Text('Missing teleplay.png', style: TextStyle(color: Colors.white)),
                         ),
                       );
                     },
