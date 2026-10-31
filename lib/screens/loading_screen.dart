@@ -18,11 +18,20 @@ class LoadingScreen extends StatefulWidget {
   State<LoadingScreen> createState() => _LoadingScreenState();
 }
 
-class _LoadingScreenState extends State<LoadingScreen> {
+class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
   @override
   void initState() {
     super.initState();
-    // THIS IS THE 5-SECOND TIMER
+    
+    // Setup the spinning animation
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000), // 1 second per rotation
+    )..repeat();
+
+    // The 5-second timer before showing the receipt
     Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
@@ -38,28 +47,56 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Scaffold background is transparent so you see the screen underneath
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5), 
+      backgroundColor: Colors.transparent, 
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // The Green Loading Circle
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-              strokeWidth: 6,
-            ),
-            const SizedBox(height: 30),
-            Text(
-              'Processing Transaction...',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.green[700],
+        child: Container(
+          padding: const EdgeInsets.all(30),
+          decoration: BoxDecoration(
+            color: Colors.white, // White circle behind the loader so it's visible
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              )
+            ]
+          ),
+          child: RotationTransition(
+            turns: _controller,
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: Stack(
+                alignment: Alignment.center,
+                children: List.generate(4, (index) {
+                  return Transform.rotate(
+                    angle: index * (3.14159 / 2), // 90 degrees
+                    child: Transform.translate(
+                      offset: const Offset(0, -18), // Push dots to the edge
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
