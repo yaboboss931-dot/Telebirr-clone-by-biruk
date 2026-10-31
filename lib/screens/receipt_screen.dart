@@ -77,7 +77,7 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 45), 
               
-              // 3. AMOUNT (WITH MINUS SIGN) - FONT REDUCED
+              // 3. AMOUNT (WITH MINUS SIGN)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -102,7 +102,7 @@ class ReceiptScreen extends StatelessWidget {
               const Divider(thickness: 1, color: Color(0xFFEEEEEE), indent: 20, endIndent: 20),
               const SizedBox(height: 20),
 
-              // 4. DETAILS - FONT SIZE REDUCED
+              // 4. DETAILS
               _buildDetailRow('Transaction Time:', timeString),
               _buildDetailRow('Transaction Type:', 'Transfer Money'),
               _buildDetailRow('Transaction To:', recipientName), 
@@ -128,22 +128,16 @@ class ReceiptScreen extends StatelessWidget {
               // 6. TELEPLAY BANNER
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    'images/teleplay.png',
-                    height: 130,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 130,
-                        color: const Color(0xFF7CB342),
-                        child: const Center(
-                          child: Text('Upload teleplay.png to images', style: TextStyle(color: Colors.white, fontSize: 16)),
-                        ),
-                      );
-                    },
+                child: Container(
+                  height: 130,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xFF7CB342), // Green fallback if missing
+                    image: const DecorationImage(
+                      image: AssetImage('images/teleplay.png'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -171,7 +165,7 @@ class ReceiptScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 50), 
                 child: SizedBox(
                   width: double.infinity,
-                  height: 50, // Slightly smaller height
+                  height: 50, 
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF7CB342),
@@ -193,19 +187,18 @@ class ReceiptScreen extends StatelessWidget {
     );
   }
 
-  // Helper function for the rows
   Widget _buildDetailRow(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12), // Tighter spacing
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12), 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: TextStyle(fontSize: 15, color: Colors.grey[600])), // Reduced from 16
+          Text(title, style: TextStyle(fontSize: 15, color: Colors.grey[600])), 
           Expanded(
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: const TextStyle(fontSize: 15, color: Colors.black87, fontWeight: FontWeight.w500), // Reduced from 16
+              style: const TextStyle(fontSize: 15, color: Colors.black87, fontWeight: FontWeight.w500), 
             ),
           ),
         ],
