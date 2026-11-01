@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'enter_amount_screen.dart'; 
+import 'enter_amount_screen.dart'; // <--- Uses the same Amount Screen!
 
 class TransferToBankScreen extends StatefulWidget {
   const TransferToBankScreen({super.key});
@@ -9,13 +9,16 @@ class TransferToBankScreen extends StatefulWidget {
 }
 
 class _TransferToBankScreenState extends State<TransferToBankScreen> {
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController accountController = TextEditingController();
 
   void goToAmountScreen() {
-    String input = accountController.text.trim();
-    if (input.isEmpty) {
+    String name = nameController.text.trim();
+    String account = accountController.text.trim();
+
+    if (name.isEmpty || account.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter an account number')),
+        const SnackBar(content: Text('Please enter Name and Account Number')),
       );
       return;
     }
@@ -24,9 +27,9 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => EnterAmountScreen(
-          recipientName: input, // <--- CHANGED: Now it shows the account number you typed!
-          phoneNumber: 'Commercial Bank of Ethiopia', // <--- Shows the bank name on the amount screen
-          transferType: 'Transfer to Bank', 
+          recipientName: name, 
+          phoneNumber: account, 
+          transferType: 'Transfer to Bank', // Triggers the purple UI!
         ),
       ),
     );
@@ -51,7 +54,7 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 1. THE BANNER (Using existing banner-3.jpg)
+            // 1. THE BANNER
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ClipRRect(
@@ -74,7 +77,7 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
               ),
             ),
 
-            // 2. Dots Indicator (Second dot active)
+            // 2. Dots
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -98,14 +101,13 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Select Bank Label
                     const Text(
                       'Select Bank',
                       style: TextStyle(fontSize: 16, color: Colors.black54),
                     ),
                     const SizedBox(height: 8),
                     
-                    // Fake Dropdown Container
+                    // Fake Dropdown
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       decoration: BoxDecoration(
@@ -126,14 +128,34 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
                     
                     const SizedBox(height: 20),
 
-                    // Account No Label
+                    // Recipient Name
+                    const Text(
+                      'Recipient Name',
+                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: nameController,
+                      keyboardType: TextInputType.name,
+                      style: const TextStyle(fontSize: 18, color: Colors.black), 
+                      decoration: InputDecoration(
+                        hintText: 'e.g. Mr Neja Kamil Nura',
+                        hintStyle: const TextStyle(color: Colors.black38, fontSize: 16),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF7CB342), width: 1.5)),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF7CB342), width: 1.5)),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF7CB342), width: 1.5)),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Account No
                     const Text(
                       'Account No',
                       style: TextStyle(fontSize: 16, color: Colors.black54),
                     ),
                     const SizedBox(height: 8),
-
-                    // Account Number Text Field
                     TextField(
                       controller: accountController,
                       keyboardType: TextInputType.number,
@@ -142,20 +164,12 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
                         hintText: 'Enter Account Number',
                         hintStyle: const TextStyle(color: Colors.black38, fontSize: 16),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Color(0xFF7CB342), width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Color(0xFF7CB342), width: 1.5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Color(0xFF7CB342), width: 1.5),
-                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF7CB342), width: 1.5)),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF7CB342), width: 1.5)),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF7CB342), width: 1.5)),
                       ),
                     ),
+
                     const SizedBox(height: 25),
 
                     // NEXT BUTTON
@@ -179,7 +193,7 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
 
             const SizedBox(height: 30),
 
-            // 4. RECENT SECTION 
+            // 4. RECENT
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Align(
@@ -197,30 +211,17 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
                             children: [
                               Container(
                                 margin: const EdgeInsets.only(right: 6, bottom: 6),
-                                width: 85,
-                                height: 85,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF689F38), 
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
+                                width: 85, height: 85,
+                                decoration: BoxDecoration(color: const Color(0xFF689F38), borderRadius: BorderRadius.circular(8)),
                               ),
                               Container(
-                                width: 85,
-                                height: 85,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF8BC34A), 
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
+                                width: 85, height: 85,
+                                decoration: BoxDecoration(color: const Color(0xFF8BC34A), borderRadius: BorderRadius.circular(8)),
                                 child: const Icon(Icons.check, size: 50, color: Colors.white),
                               ),
                               Container(
-                                width: 42,
-                                height: 42,
-                                decoration: BoxDecoration(
-                                  color: Colors.amber,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white, width: 2),
-                                ),
+                                width: 42, height: 42,
+                                decoration: BoxDecoration(color: Colors.amber, shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 2)),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -232,11 +233,7 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
                                         Icon(Icons.close, size: 10, color: Colors.black),
                                       ],
                                     ),
-                                    Container(
-                                      width: 14,
-                                      height: 2,
-                                      color: Colors.black,
-                                    )
+                                    Container(width: 14, height: 2, color: Colors.black)
                                   ],
                                 ),
                               )
