@@ -33,10 +33,6 @@ class ReceiptScreen extends StatelessWidget {
       displayAmount = '$amount.00';
     }
 
-    String displayRecipient = transferType == 'Transfer to Bank' 
-        ? 'Commercial Bank of Ethiopia' 
-        : recipientName;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -105,10 +101,10 @@ class ReceiptScreen extends StatelessWidget {
               const Divider(thickness: 1, color: Color(0xFFEEEEEE)),
               const SizedBox(height: 10),
 
-              // 4. DETAILS (Tighter spacing)
+              // 4. DETAILS (Showing the exact name you typed)
               _buildDetailRow('Transaction Time:', timeString),
               _buildDetailRow('Transaction Type:', transferType), 
-              _buildDetailRow('Transaction To:', displayRecipient), 
+              _buildDetailRow('Transaction To:', recipientName), // <--- FIXED: Now shows the name you entered!
               _buildDetailRow('Transaction Number:', txnNumber),
               
               const SizedBox(height: 5),
@@ -125,12 +121,12 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 15),
               
-              // 6. BANNER (Slightly smaller to fit screen)
+              // 6. BANNER
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
                   'images/banner-2.jpg', 
-                  height: 100, // Reduced height to fit screen
+                  height: 100, 
                   width: double.infinity,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
@@ -161,10 +157,9 @@ class ReceiptScreen extends StatelessWidget {
                 ],
               ),
               
-              // THIS MAGIC WIDGET PUSHES THE BUTTON TO THE BOTTOM
               const Spacer(),
               
-              // 8. FINISHED BUTTON (Always visible at the bottom)
+              // 8. FINISHED BUTTON
               Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: SizedBox(
@@ -192,7 +187,7 @@ class ReceiptScreen extends StatelessWidget {
 
   Widget _buildDetailRow(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8), // Reduced spacing here
+      padding: const EdgeInsets.symmetric(vertical: 8), 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
