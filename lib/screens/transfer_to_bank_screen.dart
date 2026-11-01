@@ -24,9 +24,9 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => EnterAmountScreen(
-          recipientName: 'Commercial Bank of Ethiopia', // Shows on receipt
-          phoneNumber: input, // The account number typed
-          transferType: 'Transfer to Bank', // Tells receipt to say "Transfer to Bank"
+          recipientName: input, // <--- CHANGED: Now it shows the account number you typed!
+          phoneNumber: 'Commercial Bank of Ethiopia', // <--- Shows the bank name on the amount screen
+          transferType: 'Transfer to Bank', 
         ),
       ),
     );
@@ -57,7 +57,7 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
-                  'images/banner-3.jpg', // <--- USING EXISTING IMAGE
+                  'images/banner-3.jpg', 
                   height: 110,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -158,13 +158,13 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
                     ),
                     const SizedBox(height: 25),
 
-                    // NEXT BUTTON (Greyed out like the screenshot)
+                    // NEXT BUTTON
                     SizedBox(
                       width: double.infinity,
                       height: 55,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE0E0E0), // Grey color from screenshot
+                          backgroundColor: const Color(0xFFE0E0E0), 
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           elevation: 0,
                         ),
@@ -179,7 +179,7 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
 
             const SizedBox(height: 30),
 
-            // 4. RECENT SECTION (Identical)
+            // 4. RECENT SECTION 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Align(
@@ -243,7 +243,6 @@ class _TransferToBankScreenState extends State<TransferToBankScreen> {
                             ],
                           ),
                           const SizedBox(height: 15),
-                          // Text changed to "No Record" to match screenshot
                           Text('No Record', style: TextStyle(color: Colors.grey[600], fontSize: 15)),
                         ],
                       ),
