@@ -25,11 +25,13 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
   void initState() {
     super.initState();
     
+    // Setup the spinning animation
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000), 
+      duration: const Duration(milliseconds: 1000), // 1 second per rotation
     )..repeat();
 
+    // THE 5-SECOND TIMER
     Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
@@ -37,7 +39,7 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
           builder: (context) => ReceiptScreen(
             recipientName: widget.recipientName,
             amount: widget.amount,
-            transferType: widget.transactionType, // <--- THIS IS THE FIX RIGHT HERE
+            transferType: widget.transactionType,
           ),
         ),
       );
@@ -52,13 +54,14 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    // Scaffold background is transparent so you see the screen underneath
     return Scaffold(
       backgroundColor: Colors.transparent, 
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(30),
           decoration: BoxDecoration(
-            color: Colors.white, 
+            color: Colors.white, // White circle behind the loader so it's visible
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
@@ -77,9 +80,9 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
                 alignment: Alignment.center,
                 children: List.generate(4, (index) {
                   return Transform.rotate(
-                    angle: index * (3.14159 / 2), 
+                    angle: index * (3.14159 / 2), // 90 degrees
                     child: Transform.translate(
-                      offset: const Offset(0, -18), 
+                      offset: const Offset(0, -18), // Push dots to the edge
                       child: Container(
                         width: 10,
                         height: 10,
