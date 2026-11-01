@@ -18,7 +18,6 @@ class ReceiptScreen extends StatelessWidget {
     final now = DateTime.now();
     final timeString = "${now.year}/${now.month.toString().padLeft(2, '0')}/${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
     
-    // Generate random ID
     final random = Random();
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     String txnNumber = 'DHP';
@@ -29,21 +28,25 @@ class ReceiptScreen extends StatelessWidget {
       txnNumber += random.nextInt(10).toString();
     }
 
-    // Format amount to have .00
     String displayAmount = amount;
     if (!displayAmount.contains('.')) {
       displayAmount = '$amount.00';
     }
 
+    String displayRecipient = transferType == 'Transfer to Bank' 
+        ? 'Commercial Bank of Ethiopia' 
+        : recipientName;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              // 1. TOP BUTTONS (Download & Share)
+              // 1. TOP BUTTONS
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                padding: const EdgeInsets.only(top: 10, bottom: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -75,9 +78,9 @@ class ReceiptScreen extends StatelessWidget {
                 style: TextStyle(color: Color(0xFF7CB342), fontSize: 18, fontWeight: FontWeight.bold),
               ),
               
-              const SizedBox(height: 45), 
+              const SizedBox(height: 25), 
               
-              // 3. AMOUNT (WITH MINUS SIGN)
+              // 3. AMOUNT WITH MINUS SIGN
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -98,57 +101,51 @@ class ReceiptScreen extends StatelessWidget {
                 ],
               ),
               
-              const SizedBox(height: 30),
-              const Divider(thickness: 1, color: Color(0xFFEEEEEE), indent: 20, endIndent: 20),
               const SizedBox(height: 20),
+              const Divider(thickness: 1, color: Color(0xFFEEEEEE)),
+              const SizedBox(height: 10),
 
-              // 4. DETAILS
+              // 4. DETAILS (Tighter spacing)
               _buildDetailRow('Transaction Time:', timeString),
-              _buildDetailRow('Transaction Type:', transferType), // Dynamic! "Transfer to Bank" or "Transfer Money"
-              _buildDetailRow('Transaction To:', recipientName), 
+              _buildDetailRow('Transaction Type:', transferType), 
+              _buildDetailRow('Transaction To:', displayRecipient), 
               _buildDetailRow('Transaction Number:', txnNumber),
               
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               
               // 5. QR CODE
-              const Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(Icons.qr_code, color: Color(0xFF7CB342), size: 26),
-                    SizedBox(width: 6),
-                    Text('QR Code', style: TextStyle(color: Color(0xFF7CB342), fontSize: 16, fontWeight: FontWeight.w500)),
-                  ],
-                ),
-              ),
-              
-              const SizedBox(height: 25),
-              
-              // 6. TELEPLAY BANNER (Using banner-2.jpg)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    'images/banner-2.jpg', 
-                    height: 130,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 130,
-                        color: const Color(0xFF7CB342),
-                        child: const Center(
-                          child: Text('Missing banner-2.jpg', style: TextStyle(color: Colors.white)),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(Icons.qr_code, color: Color(0xFF7CB342), size: 24),
+                  SizedBox(width: 6),
+                  Text('QR Code', style: TextStyle(color: Color(0xFF7CB342), fontSize: 16, fontWeight: FontWeight.w500)),
+                ],
               ),
               
               const SizedBox(height: 15),
+              
+              // 6. BANNER (Slightly smaller to fit screen)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  'images/banner-2.jpg', 
+                  height: 100, // Reduced height to fit screen
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 100,
+                      color: const Color(0xFF7CB342),
+                      child: const Center(
+                        child: Text('Missing banner-2.jpg', style: TextStyle(color: Colors.white)),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              
+              const SizedBox(height: 10),
               
               // 7. DOTS
               Row(
@@ -164,11 +161,12 @@ class ReceiptScreen extends StatelessWidget {
                 ],
               ),
               
-              const SizedBox(height: 40),
+              // THIS MAGIC WIDGET PUSHES THE BUTTON TO THE BOTTOM
+              const Spacer(),
               
-              // 8. FINISHED BUTTON
+              // 8. FINISHED BUTTON (Always visible at the bottom)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50), 
+                padding: const EdgeInsets.only(bottom: 20.0),
                 child: SizedBox(
                   width: double.infinity,
                   height: 50, 
@@ -185,7 +183,6 @@ class ReceiptScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
             ],
           ),
         ),
@@ -195,7 +192,7 @@ class ReceiptScreen extends StatelessWidget {
 
   Widget _buildDetailRow(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12), 
+      padding: const EdgeInsets.symmetric(vertical: 8), // Reduced spacing here
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
