@@ -118,13 +118,13 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 25),
               
-              // TELEPLAY BANNER (Using banner-2.jpg)
+              // TELEPLAY BANNER
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
-                    'images/banner-2.jpg', // <--- CHANGED THIS
+                    'images/banner-2.jpg', // <--- USING BANNER-2
                     height: 130,
                     width: double.infinity,
                     fit: BoxFit.cover,
