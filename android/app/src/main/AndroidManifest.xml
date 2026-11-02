@@ -30,4 +30,16 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    
+    <!-- THIS IS THE MAGIC PART FOR THE SMS TO WORK -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="sms" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="smsto" />
+        </intent>
+    </queries>
 </manifest>
