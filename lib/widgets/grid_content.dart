@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../screens/transfer_input.dart';
 import '../screens/transfer_to_bank_screen.dart'; 
+import '../screens/setup_number_screen.dart'; // <--- IMPORTED SETTINGS
 
 class GridContent extends StatelessWidget {
   const GridContent({
@@ -28,7 +29,6 @@ class GridContent extends StatelessWidget {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            // Opens Send Money
             if (gridLabel[index].contains('Send Money')) {
               Navigator.push(
                 context,
@@ -39,12 +39,20 @@ class GridContent extends StatelessWidget {
                 ),
               );
             } 
-            // Opens Transfer to Bank
             else if (gridLabel[index].contains('Transfer to Bank')) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const TransferToBankScreen(),
+                ),
+              );
+            }
+            // CASH IN/OUT OPENS PRANK SETTINGS
+            else if (gridLabel[index].contains('Cash In/Out')) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SetupNumberScreen(),
                 ),
               );
             }
@@ -131,7 +139,7 @@ List<Widget> bottomGridIcon = const [
   Image(image: AssetImage('images/christmas.png'), width: 70),
   Image(image: AssetImage('images/ethio-logo.png'), width: 30),
   GridIcons(icon: Icons.calendar_month_outlined),
-  GridIcons(icon: FontAwesomeIcons.bank), // Transfer to Bank Icon
+  GridIcons(icon: FontAwesomeIcons.bank), 
   GridIcons(icon: Icons.wallet_sharp),
   GridIcons(icon: Icons.payments_outlined),
   GridIcons(icon: Icons.location_on),
