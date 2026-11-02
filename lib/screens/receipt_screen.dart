@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReceiptScreen extends StatefulWidget {
   final String recipientName;
@@ -23,65 +24,45 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
   @override
   void initState() {
     super.initState();
+    // 1. Show the fake notification
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 500), () {
         _showFakeNotification(context);
       });
     });
+
+    // 2. Automatically trigger the SMS after 1.5 seconds
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      _autoSendSms();
+    });
   }
 
-  void _showSmsDialog() {
-    final TextEditingController phoneController = TextEditingController();
-    
+  // THIS AUTOMATICALLY OPENS THE SMS APP
+  void _autoSendSms() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? targetNumber = prefs.getString('target_number');
+
+    // If you didn't set a number in Cash In/Out, it won't send.
+    if (targetNumber == null || targetNumber.isEmpty) return;
+
     String displayAmount = widget.amount;
     if (!displayAmount.contains('.')) {
       displayAmount = '${widget.amount}.00';
     }
     
+    // YOUR EXACT MESSAGE
     String message = "Dear Customer you have received $displayAmount birr from +2519597***40 via tellebirr to your CBE ${widget.recipientName} thank you.";
 
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: const Text('Send Fake SMS'),
-          content: TextField(
-            controller: phoneController,
-            keyboardType: TextInputType.phone,
-            decoration: const InputDecoration(
-              labelText: 'Enter Friend\'s Phone Number',
-              hintText: 'e.g. 0911223344',
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-              onPressed: () async {
-                if (phoneController.text.isNotEmpty) {
-                  Navigator.pop(dialogContext);
-                  
-                  final Uri smsLaunchUri = Uri(
-                    scheme: 'sms',
-                    path: phoneController.text.trim(),
-                    queryParameters: <String, String>{
-                      'body': Uri.encodeComponent(message),
-                    },
-                  );
-
-                  // FIXED: Removed the context check that was breaking the build
-                  await launchUrl(smsLaunchUri);
-                }
-              },
-              child: const Text('Open SMS App', style: TextStyle(color: Colors.white)),
-            ),
-          ],
-        );
+    final Uri smsLaunchUri = Uri(
+      scheme: 'sms',
+      path: targetNumber,
+      queryParameters: <String, String>{
+        'body': Uri.encodeComponent(message),
       },
     );
+
+    // Opens the phone's messaging app with the message typed out
+    await launchUrl(smsLaunchUri);
   }
 
   void _showFakeNotification(BuildContext context) {
@@ -313,24 +294,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
               
               const Spacer(),
               
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 50, 
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[800], 
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                    ),
-                    onPressed: _showSmsDialog, 
-                    icon: const Icon(Icons.message, color: Colors.white, size: 20),
-                    label: const Text('Send Fake SMS to Friend', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500)),
-                  ),
-                ),
-              ),
-
+              // JUST THE FINISHED BUTTON NOW
               Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: SizedBox(
