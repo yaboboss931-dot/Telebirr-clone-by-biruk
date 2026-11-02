@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ReceiptScreen extends StatelessWidget {
+class ReceiptScreen extends StatefulWidget {
   final String recipientName;
   final String amount;
   final String transferType;
@@ -12,6 +14,172 @@ class ReceiptScreen extends StatelessWidget {
     required this.amount, 
     required this.transferType
   });
+
+  @override
+  State<ReceiptScreen> createState() => _ReceiptScreenState();
+}
+
+class _ReceiptScreenState extends State<ReceiptScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Triggers the fake notification on screen
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _showFakeNotification(context);
+      });
+    });
+  }
+
+  // THIS IS THE NEW SMS DIALOG
+  void _showSmsDialog() {
+    final TextEditingController phoneController = TextEditingController();
+    
+    // The exact message you want
+    String displayAmount = widget.amount;
+    if (!displayAmount.contains('.')) {
+      displayAmount = '${widget.amount}.00';
+    }
+    // You can change the masked number +2519597***40 below if you want
+    String message = "Dear Customer you have received $displayAmount birr from +2519597***40 via tellebirr to your CBE ${widget.recipientName} thank you.";
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Send Fake SMS'),
+          content: TextField(
+            controller: phoneController,
+            keyboardType: TextInputType.phone,
+            decoration: const InputDecoration(
+              labelText: 'Enter Friend\'s Phone Number',
+              hintText: 'e.g. 0911223344',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              onPressed: () async {
+                if (phoneController.text.isNotEmpty) {
+                  Navigator.pop(context);
+                  
+                  // Launch the SMS app
+                  final Uri smsLaunchUri = Uri(
+                    scheme: 'sms',
+                    path: phoneController.text.trim(),
+                    queryParameters: <String, String>{
+                      'body': Uri.encodeComponent(message),
+                    },
+                  );
+
+                  if (!await launchUrl(smsLaunchUri)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Could not open SMS app')),
+                    );
+                  }
+                }
+              },
+              child: const Text('Open SMS App', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showFakeNotification(BuildContext context) {
+    String displayAmount = widget.amount;
+    if (!displayAmount.contains('.')) {
+      displayAmount = '${widget.amount}.00';
+    }
+
+    OverlayState? overlayState = Overlay.of(context);
+    OverlayEntry overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).padding.top + 10,
+        left: 15,
+        right: 15,
+        child: Material(
+          color: Colors.transparent,
+          child: TweenAnimationBuilder(
+            tween: Tween<double>(begin: -150, end: 0),
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeOutBack,
+            builder: (context, double value, child) {
+              return Transform.translate(
+                offset: Offset(0, value),
+                child: child,
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  )
+                ],
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF7CB342),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.check, color: Colors.white, size: 30),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Telebirr',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'You have successfully transferred -$displayAmount ETB to ${widget.recipientName}. Thank you for using Telebirr.',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlayState?.insert(overlayEntry);
+
+    Timer(const Duration(seconds: 6), () {
+      overlayEntry.remove();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +196,9 @@ class ReceiptScreen extends StatelessWidget {
       txnNumber += random.nextInt(10).toString();
     }
 
-    String displayAmount = amount;
+    String displayAmount = widget.amount;
     if (!displayAmount.contains('.')) {
-      displayAmount = '$amount.00';
+      displayAmount = '${widget.amount}.00';
     }
 
     return Scaffold(
@@ -40,7 +208,6 @@ class ReceiptScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              // 1. TOP BUTTONS
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 5),
                 child: Row(
@@ -66,7 +233,6 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 10),
               
-              // 2. SUCCESS ICON
               const Icon(Icons.check_circle, color: Color(0xFF7CB342), size: 70),
               const SizedBox(height: 8),
               const Text(
@@ -76,7 +242,6 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 25), 
               
-              // 3. AMOUNT WITH MINUS SIGN
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -101,15 +266,13 @@ class ReceiptScreen extends StatelessWidget {
               const Divider(thickness: 1, color: Color(0xFFEEEEEE)),
               const SizedBox(height: 10),
 
-              // 4. DETAILS (Showing the exact name you typed)
               _buildDetailRow('Transaction Time:', timeString),
-              _buildDetailRow('Transaction Type:', transferType), 
-              _buildDetailRow('Transaction To:', recipientName), // <--- FIXED: Now shows the name you entered!
+              _buildDetailRow('Transaction Type:', widget.transferType), 
+              _buildDetailRow('Transaction To:', widget.recipientName), 
               _buildDetailRow('Transaction Number:', txnNumber),
               
               const SizedBox(height: 5),
               
-              // 5. QR CODE
               const Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -121,7 +284,6 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 15),
               
-              // 6. BANNER
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
@@ -143,7 +305,6 @@ class ReceiptScreen extends StatelessWidget {
               
               const SizedBox(height: 10),
               
-              // 7. DOTS
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -159,7 +320,26 @@ class ReceiptScreen extends StatelessWidget {
               
               const Spacer(),
               
-              // 8. FINISHED BUTTON
+              // SMS BUTTON
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50, 
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[800], 
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      elevation: 0,
+                    ),
+                    onPressed: _showSmsDialog, // Opens the dialog to type the phone number
+                    icon: const Icon(Icons.message, color: Colors.white, size: 20),
+                    label: const Text('Send Fake SMS to Friend', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500)),
+                  ),
+                ),
+              ),
+
+              // FINISHED BUTTON
               Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: SizedBox(
