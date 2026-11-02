@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SetupNumberScreen extends StatefulWidget {
   const SetupNumberScreen({super.key});
@@ -9,34 +9,36 @@ class SetupNumberScreen extends StatefulWidget {
 }
 
 class _SetupNumberScreenState extends State<SetupNumberScreen> {
-  final TextEditingController _numberController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _loadSavedNumber();
-  }
+  void _sendFakeSms() async {
+    String number = phoneController.text.trim();
+    String amount = amountController.text.trim();
+    String name = nameController.text.trim();
 
-  // Load the number when the screen opens
-  void _loadSavedNumber() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _numberController.text = prefs.getString('target_number') ?? '';
-    });
-  }
+    if (number.isEmpty || amount.isEmpty || name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all fields')),
+      );
+      return;
+    }
 
-  // Save the number to phone memory
-  void _saveNumber() async {
-    String number = _numberController.text.trim();
-    if (number.isNotEmpty) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('target_number', number);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Target Number Saved Successfully!'), backgroundColor: Colors.green),
-        );
-        Navigator.pop(context);
-      }
+    String displayAmount = amount;
+    if (!displayAmount.contains('.')) {
+      displayAmount = '$amount.00';
+    }
+
+    String message = "Dear Customer you have received $displayAmount birr from +2519597***40 via tellebirr to your CBE $name thank you.";
+
+    // THE FIX FOR THE %20 ERROR: Use Uri.parse with encodeComponent
+    final Uri smsLaunchUri = Uri.parse('sms:$number?body=${Uri.encodeComponent(message)}');
+
+    if (!await launchUrl(smsLaunchUri)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open SMS app')),
+      );
     }
   }
 
@@ -52,46 +54,75 @@ class _SetupNumberScreenState extends State<SetupNumberScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          'Prank Settings',
+          'Fake SMS Sender',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             const Text(
-              'Enter the phone number you want to send the fake SMS to. The app will remember this number.',
+              'Fill this out to send a fake CBE SMS to your friend.',
               style: TextStyle(fontSize: 16, color: Colors.black54),
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: _numberController,
+              controller: phoneController,
               keyboardType: TextInputType.phone,
               style: const TextStyle(fontSize: 18),
               decoration: InputDecoration(
                 labelText: 'Friend\'s Phone Number',
                 hintText: 'e.g. 0911223344',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: Color(0xFF7CB342), width: 2),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
+            TextField(
+              controller: nameController,
+              keyboardType: TextInputType.name,
+              style: const TextStyle(fontSize: 18),
+              decoration: InputDecoration(
+                labelText: 'Name or Account Number',
+                hintText: 'e.g. Neja Kamil Nura',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Color(0xFF7CB342), width: 2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: amountController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              style: const TextStyle(fontSize: 18),
+              decoration: InputDecoration(
+                labelText: 'Amount (ETB)',
+                hintText: 'e.g. 500',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Color(0xFF7CB342), width: 2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
+              height: 55,
+              child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF7CB342),
+                  backgroundColor: Colors.blue[800],
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
-                onPressed: _saveNumber,
-                child: const Text('Save Number', style: TextStyle(fontSize: 18, color: Colors.white)),
+                onPressed: _sendFakeSms,
+                icon: const Icon(Icons.message, color: Colors.white),
+                label: const Text('Send Fake SMS', style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
             ),
           ],
