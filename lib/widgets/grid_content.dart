@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../screens/transfer_input.dart';
 import '../screens/transfer_to_bank_screen.dart'; 
-import '../screens/setup_number_screen.dart'; // <--- IMPORTED SETTINGS
+import '../screens/setup_number_screen.dart'; 
 
 class GridContent extends StatelessWidget {
   const GridContent({
@@ -47,7 +47,7 @@ class GridContent extends StatelessWidget {
                 ),
               );
             }
-            // CASH IN/OUT OPENS PRANK SETTINGS
+            // CASH IN/OUT OPENS SMS SENDER
             else if (gridLabel[index].contains('Cash In/Out')) {
               Navigator.push(
                 context,
