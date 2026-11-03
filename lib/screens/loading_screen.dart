@@ -25,13 +25,13 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
   void initState() {
     super.initState();
     
-    // Setup the spinning animation
+    // Set up the spinning animation for the dots
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000), // 1 second per rotation
+      duration: const Duration(milliseconds: 1200), 
     )..repeat();
 
-    // THE 5-SECOND TIMER
+    // 5-second timer before showing the receipt
     Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
@@ -54,46 +54,50 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold background is transparent so you see the screen underneath
     return Scaffold(
-      backgroundColor: Colors.transparent, 
+      backgroundColor: Colors.transparent, // Transparent background
       body: Center(
         child: Container(
-          padding: const EdgeInsets.all(30),
+          width: 95, // The white rounded box size
+          height: 95,
           decoration: BoxDecoration(
-            color: Colors.white, // White circle behind the loader so it's visible
-            borderRadius: BorderRadius.circular(15),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20), // Rounded corners
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.1),
                 blurRadius: 10,
                 spreadRadius: 2,
               )
-            ]
+            ],
           ),
-          child: RotationTransition(
-            turns: _controller,
-            child: SizedBox(
-              width: 50,
-              height: 50,
-              child: Stack(
-                alignment: Alignment.center,
-                children: List.generate(4, (index) {
-                  return Transform.rotate(
-                    angle: index * (3.14159 / 2), // 90 degrees
-                    child: Transform.translate(
-                      offset: const Offset(0, -18), // Push dots to the edge
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: const BoxDecoration(
-                          color: Colors.green,
-                          shape: BoxShape.circle,
+          child: Center(
+            child: RotationTransition(
+              turns: _controller,
+              child: SizedBox(
+                width: 45, // Size of the spinning area
+                height: 45,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: List.generate(6, (index) {
+                    // Creating 6 dots that get smaller and lighter
+                    double size = 9.0 - (index * 1.2);
+                    return Transform.rotate(
+                      angle: index * (3.14159 / 3), // 60 degrees apart
+                      child: Transform.translate(
+                        offset: const Offset(0, -16), // Push to the edge
+                        child: Container(
+                          width: size,
+                          height: size,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF7CB342).withOpacity(1.0 - (index * 0.15)),
+                            shape: BoxShape.circle,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
             ),
           ),
