@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SetupNumberScreen extends StatefulWidget {
   const SetupNumberScreen({super.key});
@@ -32,12 +33,21 @@ class _SetupNumberScreenState extends State<SetupNumberScreen> {
 
     String message = "Dear Customer you have received $displayAmount birr from +2519597***40 via tellebirr to your CBE $name thank you.";
 
-    // THE FIX FOR THE %20 ERROR: Use Uri.parse with encodeComponent
     final Uri smsLaunchUri = Uri.parse('sms:$number?body=${Uri.encodeComponent(message)}');
 
     if (!await launchUrl(smsLaunchUri)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Could not open SMS app')),
+      );
+    }
+  }
+
+  void _resetBalance() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('current_balance', 245794.01);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Balance Reset to 245,794.01 ETB'), backgroundColor: Colors.green),
       );
     }
   }
@@ -125,6 +135,13 @@ class _SetupNumberScreenState extends State<SetupNumberScreen> {
                 label: const Text('Send Fake SMS', style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
             ),
+            const SizedBox(height: 40),
+            // THE RESET BUTTON
+            TextButton.icon(
+              onPressed: _resetBalance,
+              icon: const Icon(Icons.refresh, color: Colors.red),
+              label: const Text('Reset Balance to 245,794.01', style: TextStyle(color: Colors.red, fontSize: 16)),
+            )
           ],
         ),
       ),
