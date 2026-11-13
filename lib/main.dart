@@ -58,21 +58,13 @@ class _AppTimeGateState extends State<AppTimeGate> {
     DateTime now = DateTime.now();
     Duration difference = now.difference(installTime);
 
-    // Change 14 to 0 to test it immediately!
-    if (difference.inHours >= 14) {
-      int? lastUnlockMillis = prefs.getInt('last_unlock_time');
-      
-      if (lastUnlockMillis == null || now.difference(DateTime.fromMillisecondsSinceEpoch(lastUnlockMillis)).inHours >= 1) {
-        setState(() {
-          _isLocked = true;
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLocked = false;
-          _isLoading = false;
-        });
-      }
+    // 🚨 THE KILL SWITCH IS HERE 🚨
+    // 8 hours = 8 hours. Change to 0 to test it immediately.
+    if (difference.inHours >= 8) {
+      setState(() {
+        _isLocked = true;
+        _isLoading = false;
+      });
     } else {
       setState(() {
         _isLocked = false;
@@ -91,109 +83,43 @@ class _AppTimeGateState extends State<AppTimeGate> {
     }
 
     if (_isLocked) {
-      return LockScreen(
-        onUnlock: () {
-          _checkTimeLock();
-        },
-      );
+      return const EnatknLbdaScreen();
     }
 
     return const LoginScreen();
   }
 }
 
-class LockScreen extends StatefulWidget {
-  final VoidCallback onUnlock;
-  const LockScreen({super.key, required this.onUnlock});
-
-  @override
-  State<LockScreen> createState() => _LockScreenState();
-}
-
-class _LockScreenState extends State<LockScreen> {
-  final TextEditingController _passwordController = TextEditingController();
-  bool _isPasswordVisible = false;
-  String _errorMessage = '';
-
-  void _verifyPassword() async {
-    String enteredPassword = _passwordController.text.trim();
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String requiredPassword = prefs.getString('next_password') ?? 'yeab@1234';
-
-    if (enteredPassword == requiredPassword) {
-      await prefs.setInt('last_unlock_time', DateTime.now().millisecondsSinceEpoch);
-      
-      if (requiredPassword == 'yeab@1234') {
-        await prefs.setString('next_password', 'yeab@12345');
-      } else {
-        await prefs.setString('next_password', 'yeab@1234');
-      }
-
-      widget.onUnlock();
-    } else {
-      setState(() {
-        _errorMessage = 'Wrong password! Ask Yeabsra 😂';
-      });
-    }
-  }
+// --- THE TROLL SCREEN 😂 ---
+class EnatknLbdaScreen extends StatelessWidget {
+  const EnatknLbdaScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black, // Dark background to make it dramatic
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'ASK YEABSRA FOR PASSWORD IF U WANT TO MAKE IT 😂',
+            children: const [
+              Text(
+                '_ enatkn lbda 😂',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 28, 
+                  fontSize: 45, // MASSIVE FONT
                   fontWeight: FontWeight.bold,
                   color: Colors.red,
                 ),
               ),
-              const SizedBox(height: 40),
-              
-              TextField(
-                controller: _passwordController,
-                obscureText: !_isPasswordVisible,
-                style: const TextStyle(fontSize: 20),
-                decoration: InputDecoration(
-                  labelText: 'Enter Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                  ),
-                ),
-              ),
-              
-              const SizedBox(height: 20),
-              
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  ),
-                  onPressed: _verifyPassword,
-                  child: const Text('Unlock for 1 Hour', style: TextStyle(fontSize: 18, color: Colors.white)),
+              SizedBox(height: 20),
+              Text(
+                'App expired. Go ask Yeabsra for a new one.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18, 
+                  color: Colors.white70,
                 ),
               ),
             ],
