@@ -44,7 +44,7 @@ class _AppTimeGateState extends State<AppTimeGate> {
     _checkTimeLock();
   }
 
-  Future<void> _checkTimeLock() async {
+  void _checkTimeLock() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     
     int? installTimeMillis = prefs.getInt('install_time');
@@ -58,6 +58,7 @@ class _AppTimeGateState extends State<AppTimeGate> {
     DateTime now = DateTime.now();
     Duration difference = now.difference(installTime);
 
+    // Change 14 to 0 to test it immediately!
     if (difference.inHours >= 14) {
       int? lastUnlockMillis = prefs.getInt('last_unlock_time');
       
@@ -114,7 +115,7 @@ class _LockScreenState extends State<LockScreen> {
   bool _isPasswordVisible = false;
   String _errorMessage = '';
 
-  Future<void> _verifyPassword() async {
+  void _verifyPassword() async {
     String enteredPassword = _passwordController.text.trim();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
