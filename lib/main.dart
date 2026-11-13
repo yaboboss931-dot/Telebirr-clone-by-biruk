@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const AppTimeGate(), // <--- The Time Lock Gate
+      home: const AppTimeGate(), 
     );
   }
 }
@@ -44,7 +44,7 @@ class _AppTimeGateState extends State<AppTimeGate> {
     _checkTimeLock();
   }
 
-  void _checkTimeLock() async {
+  Future<void> _checkTimeLock() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     
     int? installTimeMillis = prefs.getInt('install_time');
@@ -58,25 +58,21 @@ class _AppTimeGateState extends State<AppTimeGate> {
     DateTime now = DateTime.now();
     Duration difference = now.difference(installTime);
 
-    // Check if 14 hours have passed
     if (difference.inHours >= 14) {
       int? lastUnlockMillis = prefs.getInt('last_unlock_time');
       
-      // If they have never unlocked it, or if 1 hour has passed since the last unlock
       if (lastUnlockMillis == null || now.difference(DateTime.fromMillisecondsSinceEpoch(lastUnlockMillis)).inHours >= 1) {
         setState(() {
           _isLocked = true;
           _isLoading = false;
         });
       } else {
-        // They unlocked it less than 1 hour ago, let them in
         setState(() {
           _isLocked = false;
           _isLoading = false;
         });
       }
     } else {
-      // 14 hours haven't passed yet, let them in
       setState(() {
         _isLocked = false;
         _isLoading = false;
@@ -96,18 +92,15 @@ class _AppTimeGateState extends State<AppTimeGate> {
     if (_isLocked) {
       return LockScreen(
         onUnlock: () {
-          // Re-check the time lock after they unlock
           _checkTimeLock();
         },
       );
     }
 
-    // If unlocked, show the real app
     return const LoginScreen();
   }
 }
 
-// --- THE LOCK SCREEN WITH PASSWORDS ---
 class LockScreen extends StatefulWidget {
   final VoidCallback onUnlock;
   const LockScreen({super.key, required this.onUnlock});
@@ -121,18 +114,15 @@ class _LockScreenState extends State<LockScreen> {
   bool _isPasswordVisible = false;
   String _errorMessage = '';
 
-  void _verifyPassword() async {
+  Future<void> _verifyPassword() async {
     String enteredPassword = _passwordController.text.trim();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // We check which password is required next. Default is the first one.
     String requiredPassword = prefs.getString('next_password') ?? 'yeab@1234';
 
     if (enteredPassword == requiredPassword) {
-      // Save the time they unlocked it so it gives them 1 hour
       await prefs.setInt('last_unlock_time', DateTime.now().millisecondsSinceEpoch);
       
-      // Change the password for the NEXT time it locks
       if (requiredPassword == 'yeab@1234') {
         await prefs.setString('next_password', 'yeab@12345');
       } else {
@@ -161,7 +151,7 @@ class _LockScreenState extends State<LockScreen> {
                 'ASK YEABSRA FOR PASSWORD IF U WANT TO MAKE IT 😂',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 28, // BIG FONT
+                  fontSize: 28, 
                   fontWeight: FontWeight.bold,
                   color: Colors.red,
                 ),
