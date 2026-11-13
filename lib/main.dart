@@ -37,7 +37,6 @@ class AppTimeGate extends StatefulWidget {
 class _AppTimeGateState extends State<AppTimeGate> {
   bool _isLoading = true;
   bool _isLocked = false;
-  bool _isUnlocked = false;
 
   @override
   void initState() {
@@ -48,11 +47,9 @@ class _AppTimeGateState extends State<AppTimeGate> {
   void _checkTimeLock() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     
-    // Check if the app was ever installed before
     int? installTimeMillis = prefs.getInt('install_time');
     
     if (installTimeMillis == null) {
-      // First time opening the app
       installTimeMillis = DateTime.now().millisecondsSinceEpoch;
       await prefs.setInt('install_time', installTimeMillis);
     }
@@ -61,30 +58,27 @@ class _AppTimeGateState extends State<AppTimeGate> {
     DateTime now = DateTime.now();
     Duration difference = now.difference(installTime);
 
-    // Check if 14 hours (14 * 60 minutes) have passed
+    // Check if 14 hours have passed
     if (difference.inHours >= 14) {
-      // Check if they unlocked it in the last 1 hour
       int? lastUnlockMillis = prefs.getInt('last_unlock_time');
-      if (lastUnlockMillis != null) {
-        DateTime lastUnlock = DateTime.fromMillisecondsSinceEpoch(lastUnlockMillis);
-        if (now.difference(lastUnlock).inHours < 1) {
-          setState(() {
-            _isUnlocked = true;
-            _isLoading = false;
-          });
-          return;
-        }
-      }
       
-      // Time is up, lock the app
-      setState(() {
-        _isLocked = true;
-        _isLoading = false;
-      });
+      // If they have never unlocked it, or if 1 hour has passed since the last unlock
+      if (lastUnlockMillis == null || now.difference(DateTime.fromMillisecondsSinceEpoch(lastUnlockMillis)).inHours >= 1) {
+        setState(() {
+          _isLocked = true;
+          _isLoading = false;
+        });
+      } else {
+        // They unlocked it less than 1 hour ago, let them in
+        setState(() {
+          _isLocked = false;
+          _isLoading = false;
+        });
+      }
     } else {
-      // Time is not up yet, let them in
+      // 14 hours haven't passed yet, let them in
       setState(() {
-        _isUnlocked = true;
+        _isLocked = false;
         _isLoading = false;
       });
     }
@@ -102,10 +96,8 @@ class _AppTimeGateState extends State<AppTimeGate> {
     if (_isLocked) {
       return LockScreen(
         onUnlock: () {
-          setState(() {
-            _isLocked = false;
-            _isUnlocked = true;
-          });
+          // Re-check the time lock after they unlock
+          _checkTimeLock();
         },
       );
     }
@@ -132,20 +124,19 @@ class _LockScreenState extends State<LockScreen> {
   void _verifyPassword() async {
     String enteredPassword = _passwordController.text.trim();
 
-    // Define the valid passwords
-    const String pass1 = 'yeab@1234';
-    const String pass2 = 'yeab@12345'; // The new password for the next time
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // We check which password is required next. Default is the first one.
+    String requiredPassword = prefs.getString('next_password') ?? 'yeab@1234';
 
-    if (enteredPassword == pass1 || enteredPassword == pass2) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (enteredPassword == requiredPassword) {
       // Save the time they unlocked it so it gives them 1 hour
       await prefs.setInt('last_unlock_time', DateTime.now().millisecondsSinceEpoch);
       
-      // If they used pass1, change the password to pass2 for next time
-      if (enteredPassword == pass1) {
-        await prefs.setString('next_password', pass2);
-      } else if (enteredPassword == pass2) {
-        await prefs.setString('next_password', pass1); // Switches back and forth
+      // Change the password for the NEXT time it locks
+      if (requiredPassword == 'yeab@1234') {
+        await prefs.setString('next_password', 'yeab@12345');
+      } else {
+        await prefs.setString('next_password', 'yeab@1234');
       }
 
       widget.onUnlock();
