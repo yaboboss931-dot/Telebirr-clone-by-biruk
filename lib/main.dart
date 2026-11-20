@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:telebirrbybr7/colors.dart'; 
-import 'package:telebirrbybr7/screens/main_screen.dart'; 
+import 'package:telebirrbybr7/screens/password_screen.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MainScreen(), // <--- Goes straight to the home screen!
+      home: const PasswordScreen(), 
     );
   }
 }
