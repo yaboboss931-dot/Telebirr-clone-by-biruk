@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:telebirrbybr7/colors.dart'; 
 import 'package:telebirrbybr7/screens/password_screen.dart'; 
 
 void main() {
@@ -16,8 +15,8 @@ class MyApp extends StatelessWidget {
       title: 'Telebirr',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: mainColor,
-          primary: mainColor,
+          seedColor: const Color(0xFF7CB342),
+          primary: const Color(0xFF7CB342),
         ),
         useMaterial3: true,
       ),
