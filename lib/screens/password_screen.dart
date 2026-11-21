@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main_screen.dart'; // Imports your real home screen
+import 'main_screen.dart';
 
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({super.key});
@@ -14,15 +14,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
   bool _isObscured = true;
 
   void _checkPassword() {
-    // 🚨 THIS IS YOUR PASSWORD 🚨
     if (_passwordController.text == 'baba@1234') {
-      // If correct, go to the app
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const MainScreen()),
       );
     } else {
-      // If wrong, show an error
       setState(() {
         _errorMessage = 'Wrong Password! Access Denied.';
       });
@@ -39,11 +36,10 @@ class _PasswordScreenState extends State<PasswordScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Telebirr Logo or Icon
               const Icon(
                 Icons.lock_outline,
                 size: 80,
-                color: Color(0xFF7CB342), // Telebirr Green
+                color: Color(0xFF7CB342),
               ),
               const SizedBox(height: 20),
               const Text(
@@ -55,8 +51,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 ),
               ),
               const SizedBox(height: 30),
-
-              // Password Text Field
               TextField(
                 controller: _passwordController,
                 obscureText: _isObscured,
@@ -85,8 +79,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Unlock Button
               SizedBox(
                 width: double.infinity,
                 height: 55,
